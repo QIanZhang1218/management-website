@@ -13,7 +13,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import {FormLabel} from "@material-ui/core";
+// import {FormLabel} from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -78,19 +78,19 @@ export default function SignUp() {
     const [name,setName] = useState('');
     const [email,setEmail]=useState('');
     const [password,setPassword]=useState('');
-    const [value, setValue] = React.useState('female');
+    const [gender, setGender] = useState('female');
     //handle gender radio change
     const handleChange = (event) => {
-        setValue(event.target.value);
+        setGender(event.target.value);
     };
     function handleSubmit(event){
         event.preventDefault();
         var para = {
-            name,email,password
+            name,email,password,gender
         }
         console.log(para);
         axios({
-            url: '/api/SignUp/PushSignUps',
+            url: '/api/AdminSignUp/PushAdminSignUp',
             method: 'post',
             headers: {
                 'deviceCode': 'A95ZEF1-47B5-AC90BF3'
@@ -100,7 +100,8 @@ export default function SignUp() {
             data: {
                 name: para.name,
                 email: para.email,
-                password:para.password
+                pwd:para.password,
+                gender:para.gender
             }})
     }
 
@@ -138,9 +139,9 @@ export default function SignUp() {
                                    autoComplete="email"
                         />
                     </Grid>
-                    <Grid item xs={12} justifyContent={"center"}>
+                    <Grid item xs={12}>
                         <label>Gender</label>
-                        <RadioGroup aria-label="gender" name="gender1" value={value} onChange={handleChange}>
+                        <RadioGroup aria-label="gender" name="gender1" value={gender} onChange={handleChange}>
                             <FormControlLabel value="female" control={<Radio />} label="Female" />
                             <FormControlLabel value="male" control={<Radio />} label="Male" />
                             <FormControlLabel value="other" control={<Radio />} label="Other" />

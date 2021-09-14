@@ -3,7 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import {Link} from 'react-router-dom';
+import {Link,useHistory} from 'react-router-dom';
 import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -48,7 +48,7 @@ export default function Login() {
     const classes = useStyles();
     const [email,setEmail] = useState();
     const [pwd,setPwd] = useState();
-
+    let history = useHistory();
     function handleLogIn(event){
         event.preventDefault();
         var para = {
@@ -63,12 +63,12 @@ export default function Login() {
             contentType:'application/json',
             data: {
                 email: para.email,
-                password:para.pwd,
+                pwd:para.pwd,
             }}).then((Result) => {
             console.log(Result.data);
             if (Result.data.success === true){
-                document.cookie=""+Result.data.token;
-                window.location.href="/";
+                document.cookie="token="+Result.data.token;
+                history.push("/Dashboard");
             }
 
             else
@@ -110,10 +110,6 @@ export default function Login() {
                         id="password"
                         autoComplete="current-password"
                     />
-                    {/*<FormControlLabel*/}
-                    {/*    control={<Checkbox value="remember" color="primary" />}*/}
-                    {/*    label="Remember me"*/}
-                    {/*/>*/}
                     <Button
                         type="submit"
                         fullWidth
@@ -130,7 +126,7 @@ export default function Login() {
                         {/*    </Link>*/}
                         {/*</Grid>*/}
                         <Grid>
-                            <Link to="/SignUp" variant="body2">
+                            <Link to="./SignUp/SignUp" variant="body2">
                                 {"Don't have an account? Sign Up"}
                             </Link>
                         </Grid>
@@ -140,6 +136,7 @@ export default function Login() {
             {/*<Box mt={8}>*/}
             {/*    <Copyright />*/}
             {/*</Box>*/}
+
         </Container>
     );
 }
