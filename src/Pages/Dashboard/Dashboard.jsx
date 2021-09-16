@@ -12,19 +12,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Badge from '@material-ui/core/Badge';
 import {Link,Route,Redirect,Switch} from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
+import FaceIcon from '@material-ui/icons/Face';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-import { mainListItems } from '../../Component/ListItems/ListItems';
-import HomePage from './HomePage/HomePage';
-import UserInfo from "./UserInfo/UserInfo";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ListItemText from "@material-ui/core/ListItemText";
-import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import PeopleIcon from "@material-ui/icons/People";
 import BarChartIcon from "@material-ui/icons/BarChart";
 import LayersIcon from "@material-ui/icons/Layers";
+import AdminInfo from "./AdminInfo/AdminInfo";
+import HomePage from './HomePage/HomePage';
+import UserInfo from "./UserInfo/UserInfo";
 
 const drawerWidth = 240;
 
@@ -161,17 +161,17 @@ export default function Dashboard() {
                         </ListItemIcon>
                         <ListItemText primary="Dashboard" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem component={Link} to="/Dashboard/AdminInfo" button>
                         <ListItemIcon>
-                            <ShoppingCartIcon />
+                            <SupervisorAccountIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Orders" />
+                        <ListItemText primary="Administrator" />
                     </ListItem>
                     <ListItem component={Link} to="/Dashboard/UserInfo" button>
                         <ListItemIcon>
-                            <PeopleIcon />
+                            <FaceIcon />
                         </ListItemIcon>
-                        <ListItemText primary="User Information" />
+                        <ListItemText primary="User" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
@@ -196,6 +196,7 @@ export default function Dashboard() {
                 <Switch>
                     <Route path="/Dashboard/HomePage" component={HomePage}/>
                     <Route path="/Dashboard/UserInfo" component = {UserInfo}/>
+                    <Route path="/Dashboard/AdminInfo" component = {AdminInfo}/>
                     <Redirect to="Dashboard/HomePage"/>
                 </Switch>
             </main>

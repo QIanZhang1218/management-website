@@ -10,55 +10,55 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import RefreshIcon from '@material-ui/icons/Refresh';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal} from 'react-bootstrap';
+import AddAdminForm from "./AddAdminFrom/AddAdminForm";
 import UserInfoTable from '../UserInfo/UserInfo.module.css'
-import AddUserForm from "./AddUserForm/UserInfoForm";
 
 const columns = [
     {
-        field :'readerId',
-        headerName: 'Reader ID',
+        field :'adminId',
+        headerName: 'Admin ID',
         type: 'number',
         width: 150,
         align: "center",
     },
     {
-        field :'readerName',
+        field :'adminName',
         headerName: 'Name',
         width: 150,
         align: "left",
         editable: true,
     },
     {
-        field :'readerEmail',
+        field :'adminEmail',
         headerName: 'Email',
         width: 180,
         align: "left",
         editable: true,
     },
     {
-        field :'readerOnhold',
-        headerName: 'On hold',
-        type:'number',
+        field :'adminPassword',
+        headerName: 'Password',
         width: 150,
         align: "right",
         editable: true,
     },
     {
-        field: 'readerUnpaid',
-        headerName: 'Unpaid Fine',
+        field: 'adminGender',
+        headerName: 'Gender',
         type: 'number',
         width: 180,
         align: "right",
+        editable: true,
     },
     {
-        field: "readerRemark",
-        headerName: "Remark",
-        width:140,
-        editMode:"cell",
+        field: 'adminRemark',
+        headerName: 'Remark',
+        width: 180,
+        align: "right",
         editable: true,
 
-        renderCell: (params) => {
-            if (params.row.readerRemark == null){
+        rederCell  :(params) => {
+            if (params.row.adminRemark == null){
                 return(
                     <td>Null</td>
                 );
@@ -77,7 +77,7 @@ const columns = [
             const onClickDelete = () => {
                 // const res = JSON.stringify(params.row, null, 4);
                 axios({
-                    url: '/api/AdminManagement/DeleteUserInfo',
+                    url: '/api/AdminManagement/DeleteAdminInfo',
                     method: 'post',
                     headers: {
                         'deviceCode': 'A95ZEF1-47B5-AC90BF3'
@@ -87,26 +87,19 @@ const columns = [
                     data: params.row
                 }).then((res) => {
                     console.log(res);
-                    switch (res.data.message){
-                        case 'Exist on hold books.':
-                            alert("Please return all borrow books first");
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Unpaid fine exist.':
-                            alert("Please pay the fine first");
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Delete Successful.':
-                            alert("Delete Successful")
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Have not sign in.':
-                            alert("Please log in first.")
-                            return window.location.href = "/";
-                    }
+                   if (res.data.message === "Delete Successful."){
+                       alert(res.data.message);
+                       return window.location.href="/Dashboard/AdminInfo";
+                   }else if(res.data.message === "Please login first."){
+                       alert(res.data.message);
+                       return window.location.href="/";
+                   }
                 })
             };
             const onClickEdit = () => {
                 // return alert(JSON.stringify(params.row, null, 4));
                 axios({
-                    url: '/api/AdminManagement/EditUserInfo',
+                    url: '/api/AdminManagement/EditAdminInfo',
                     method: 'post',
                     headers: {
                         'deviceCode': 'A95ZEF1-47B5-AC90BF3'
@@ -118,15 +111,14 @@ const columns = [
                     console.log(res);
                     switch (res.data.message){
                         case 'Edit Successful.':
-                            alert("Edit Successful");
-                            return window.location.href="/Dashboard/UserInfo";
+                            alert(res.data.message);
+                            return window.location.href="/Dashboard/AdminInfo";
                         case 'Have not log in.':
                             alert("Please log in first.")
                             return window.location.href = "/";
-                        case "Email already exist":
-                            alert("Fail to edit.Email already exist")
-                            return window.location.href="/Dashboard/UserInfo"
-
+                        case 'Email already exist':
+                            alert(res.data.message);
+                            return window.location.href="/Dashboard/AdminInfo";
                     }
                 })
             };
@@ -200,7 +192,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function UserInfo() {
+export default function AdminInfo() {
     const classes = useStyles();
     let history = useHistory();
     const [isLoading, setLoading] = useState(true);
@@ -220,12 +212,13 @@ export default function UserInfo() {
 
     useEffect(() => {
         refresh && setTimeout(() => setRefresh(false));
-        axios.get( "/api/AdminManagement/GetReaderInfo",).then(response => {
+        axios.get( "/api/AdminManagement/GetAdminInfo",).then(response => {
+            console.log(response);
             if(response.data.message === "No records"){
                 setRecord(false);
             }
             if(response.data.success){
-                setData(response.data.readerList);
+                setData(response.data.adminList);
                 setLoading(false);
             }
             else{
@@ -245,12 +238,12 @@ export default function UserInfo() {
             <div className={classes.appBarSpacer} />
             <Container maxWidth="lg" className={classes.container}>
                 <div className={UserInfoTable.topBox}>
-                    <button className={UserInfoTable.addButton} onClick={handleShow} >Add User</button>
+                    <button className={UserInfoTable.addButton} onClick={handleShow} >Add Administrator</button>
                     <button className={UserInfoTable.addButton} onClick={handleRefresh}><RefreshIcon /></button>
                 </div>
                 <div style={{ height: 400, width: '100%' }}>
                     <DataGrid
-                        getRowId={(r) => r.readerId}
+                        getRowId={(r) => r.adminId}
                         rows={data}
                         rwoHeight={20}
                         columns={columns}
@@ -261,11 +254,11 @@ export default function UserInfo() {
                 {/*react bootstrap modal*/}
                 <Modal show={show} onHide={handleClose} centered>
                     <Modal.Header closeButton>
-                        <Modal.Title>Add New User</Modal.Title>
+                        <Modal.Title>Add New Administrator</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
                         {/*<AddUserForm handleSubmit={handleSubmit} />*/}
-                        <AddUserForm/>
+                        <AddAdminForm/>
                     </Modal.Body>
                     {/*<Modal.Footer>*/}
                     {/*    <Button variant="secondary" onClick={handleClose}>*/}

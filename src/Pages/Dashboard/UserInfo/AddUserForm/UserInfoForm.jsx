@@ -12,7 +12,6 @@ export default function AddUserForm() {
         var para = {
             name,email,password
         }
-        console.log(para);
         axios({
             url:'/api/SignUp/PushSignUps',
             method:'post',
@@ -23,7 +22,7 @@ export default function AddUserForm() {
             data:para
         }).then(response => {
                alert(response.data.message);
-               // window.location.href="/Dashboard/UserInfo";
+               window.location.href="/Dashboard/UserInfo";
             }
         )
     }
