@@ -24,7 +24,7 @@ export default function AddAdminForm() {
             data:para
         }).then(response => {
                 alert(response.data.message);
-                //window.location.href="/Dashboard/UserInfo";
+                window.location.href="/Dashboard/AdminInfo";
             }
         )
     }

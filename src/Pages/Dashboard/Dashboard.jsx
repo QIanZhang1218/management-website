@@ -13,18 +13,20 @@ import Badge from '@material-ui/core/Badge';
 import {Link,Route,Redirect,Switch} from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import FaceIcon from '@material-ui/icons/Face';
+import BookIcon from '@material-ui/icons/Book';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import ListAltIcon from '@material-ui/icons/ListAlt';
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ListItemText from "@material-ui/core/ListItemText";
 import BarChartIcon from "@material-ui/icons/BarChart";
-import LayersIcon from "@material-ui/icons/Layers";
 import AdminInfo from "./AdminInfo/AdminInfo";
 import HomePage from './HomePage/HomePage';
 import UserInfo from "./UserInfo/UserInfo";
+import BookInfo from "./BookInfo/BookInfo";
 
 const drawerWidth = 240;
 
@@ -134,11 +136,11 @@ export default function Dashboard() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Dashboard
                     </Typography>
-                    <IconButton color="inherit">
-                        <Badge badgeContent={4} color="secondary">
-                            <NotificationsIcon />
-                        </Badge>
-                    </IconButton>
+                    {/*<IconButton color="inherit">*/}
+                    {/*    <Badge badgeContent={4} color="secondary">*/}
+                    {/*        <NotificationsIcon />*/}
+                    {/*    </Badge>*/}
+                    {/*</IconButton>*/}
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -173,17 +175,17 @@ export default function Dashboard() {
                         </ListItemIcon>
                         <ListItemText primary="User" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem component={Link} to="/Dashboard/BookInfo" button>
                         <ListItemIcon>
-                            <BarChartIcon />
+                            <BookIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Reports" />
+                        <ListItemText primary="Book" />
                     </ListItem>
                     <ListItem button>
                         <ListItemIcon>
-                            <LayersIcon />
+                            <ListAltIcon />
                         </ListItemIcon>
-                        <ListItemText primary="Integrations" />
+                        <ListItemText primary="Borrow Records" />
                     </ListItem>
                 </List>
             </Drawer>
@@ -197,6 +199,7 @@ export default function Dashboard() {
                     <Route path="/Dashboard/HomePage" component={HomePage}/>
                     <Route path="/Dashboard/UserInfo" component = {UserInfo}/>
                     <Route path="/Dashboard/AdminInfo" component = {AdminInfo}/>
+                    <Route path="/Dashboard/BookInfo" component = {BookInfo} />
                     <Redirect to="Dashboard/HomePage"/>
                 </Switch>
             </main>
