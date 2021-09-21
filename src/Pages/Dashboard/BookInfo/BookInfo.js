@@ -10,7 +10,8 @@ import DeleteIcon from "@material-ui/icons/Delete"
 import RefreshIcon from '@material-ui/icons/Refresh';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal} from 'react-bootstrap';
-import UserInfoTable from '../UserInfo/UserInfo.module.css'
+import UserInfoTable from '../UserInfo/UserInfo.module.css';
+import AddBookForm from './AddBookInfo/AddBookInfo';
 
 const columns = [
     {
@@ -345,7 +346,7 @@ export default function AdminInfo() {
                         <Modal.Title>Add New Book</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/*<AddAdminForm/>*/}
+                        <AddBookForm/>
                     </Modal.Body>
                 </Modal>
             </Container>
