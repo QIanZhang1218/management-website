@@ -164,7 +164,7 @@ const columns = [
             const onClickDelete = () => {
                 // const res = JSON.stringify(params.row, null, 4);
                 axios({
-                    url: '/api/AdminManagement/DeleteAdminInfo',
+                    url: '/api/AdminManagement/DeleteBookInfo',
                     method: 'post',
                     headers: {
                         'deviceCode': 'A95ZEF1-47B5-AC90BF3'
@@ -176,7 +176,7 @@ const columns = [
                     console.log(res);
                     if (res.data.message === "Delete Successful."){
                         alert(res.data.message);
-                        return window.location.href="/Dashboard/AdminInfo";
+                        return window.location.href="/Dashboard/BookInfo";
                     }else if(res.data.message === "Please login first."){
                         alert(res.data.message);
                         return window.location.href="/";
