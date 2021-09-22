@@ -222,7 +222,7 @@ export default function AdminInfo() {
                 setLoading(false);
             }
             else{
-                history.push("SignIn");
+                history.push("/");
             }
         })
     }, [refresh]);

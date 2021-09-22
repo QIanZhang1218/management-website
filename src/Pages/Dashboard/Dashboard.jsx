@@ -24,6 +24,7 @@ import AdminInfo from "./AdminInfo/AdminInfo";
 import HomePage from './HomePage/HomePage';
 import UserInfo from "./UserInfo/UserInfo";
 import BookInfo from "./BookInfo/BookInfo";
+import BorrowRecords from "./BorrowRecords/BorrowRecords";
 
 const drawerWidth = 240;
 
@@ -178,7 +179,7 @@ export default function Dashboard() {
                         </ListItemIcon>
                         <ListItemText primary="Book" />
                     </ListItem>
-                    <ListItem button>
+                    <ListItem component={Link} to="/Dashboard/BorrowRecords" button>
                         <ListItemIcon>
                             <ListAltIcon />
                         </ListItemIcon>
@@ -197,7 +198,8 @@ export default function Dashboard() {
                     <Route path="/Dashboard/UserInfo" component = {UserInfo}/>
                     <Route path="/Dashboard/AdminInfo" component = {AdminInfo}/>
                     <Route path="/Dashboard/BookInfo" component = {BookInfo} />
-                    <Redirect to="Dashboard/HomePage"/>
+                    <Route path="/Dashboard/BorrowRecords" component = {BorrowRecords} />
+                    <Redirect to="/Dashboard/HomePage"/>
                 </Switch>
             </main>
         </div>

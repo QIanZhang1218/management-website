@@ -278,11 +278,11 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function AdminInfo() {
+export default function BookInfo() {
     const classes = useStyles();
     let history = useHistory();
-    const [isLoading, setLoading] = useState(true);
     const [record,setRecord] = useState(true);
+    const [isLoading, setLoading] = useState(true);
     const [data,setData] = useState();
     //react bootstrap modal
     const [show, setShow] = useState(false);
@@ -318,9 +318,9 @@ export default function AdminInfo() {
     if (isLoading) {
         return <div>Loading...</div>;
     }
-    if(!record){
-        return <div>No relative records</div>;
-    }
+    // if(!record){
+    //     return <div>No relative records</div>;
+    // }
     return (
         <div>
             <div className={classes.appBarSpacer} />
