@@ -45,7 +45,6 @@ const columns = [
     {
         field: 'bookPages',
         headerName: 'Pages',
-        type: 'number',
         width: 120,
         align: "right",
         editable: true,
@@ -112,7 +111,6 @@ const columns = [
     {
         field: 'bookPublishDate',
         headerName: 'Publish Year',
-        type: 'number',
         width: 150,
         align: "right",
         editable: true,
@@ -160,7 +158,7 @@ const columns = [
         sortable: false,
 
         renderCell: (params) => {
-            console.log(params);
+            // console.log(params);
             const onClickDelete = () => {
                 // const res = JSON.stringify(params.row, null, 4);
                 axios({
@@ -173,7 +171,7 @@ const columns = [
                     ,
                     data: params.row
                 }).then((res) => {
-                    console.log(res);
+                    // console.log(res);
                     if (res.data.message === "Delete Successful."){
                         alert(res.data.message);
                         return window.location.href="/Dashboard/BookInfo";
@@ -184,9 +182,10 @@ const columns = [
                 })
             };
             const onClickEdit = () => {
+                console.log(params);
                 // return alert(JSON.stringify(params.row, null, 4));
                 axios({
-                    url: '/api/AdminManagement/EditAdminInfo',
+                    url: '/api/AdminManagement/EditBookInfo',
                     method: 'post',
                     headers: {
                         'deviceCode': 'A95ZEF1-47B5-AC90BF3'
@@ -196,17 +195,17 @@ const columns = [
                     data: params.row
                 }).then((res) => {
                     console.log(res);
-                    switch (res.data.message){
-                        case 'Edit Successful.':
-                            alert(res.data.message);
-                            return window.location.href="/Dashboard/AdminInfo";
-                        case 'Have not log in.':
-                            alert("Please log in first.")
-                            return window.location.href = "/";
-                        case 'Email already exist':
-                            alert(res.data.message);
-                            return window.location.href="/Dashboard/AdminInfo";
-                    }
+                    // switch (res.data.message){
+                    //     case 'Edit Successful.':
+                    //         alert(res.data.message);
+                    //         return window.location.href="/Dashboard/AdminInfo";
+                    //     case 'Have not log in.':
+                    //         alert("Please log in first.")
+                    //         return window.location.href = "/";
+                    //     case 'Email already exist':
+                    //         alert(res.data.message);
+                    //         return window.location.href="/Dashboard/AdminInfo";
+                    // }
                 })
             };
 
@@ -300,7 +299,7 @@ export default function AdminInfo() {
     useEffect(() => {
         refresh && setTimeout(() => setRefresh(false));
         axios.get( "/api/BookList/GetBookLIst",).then(response => {
-            console.log(response);
+            // console.log(response);
             setData(response.data);
             setLoading(false);
             // if(response.data.message === "No records"){
