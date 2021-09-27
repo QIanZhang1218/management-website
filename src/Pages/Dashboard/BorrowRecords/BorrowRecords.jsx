@@ -4,9 +4,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 import {DataGrid,} from "@material-ui/data-grid";
-import EditIcon from "@material-ui/icons/Edit";
-import {IconButton} from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete"
+// import EditIcon from "@material-ui/icons/Edit";
+// import {IconButton} from "@material-ui/core";
+// import DeleteIcon from "@material-ui/icons/Delete"
 import RefreshIcon from '@material-ui/icons/Refresh';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal} from 'react-bootstrap';
@@ -23,24 +23,41 @@ const columns = [
     },
     {
         field :'bookId',
-        headerName: 'Book ID',
-        width: 150,
+        headerName: 'Book',
+        width: 130,
         type: "number",
+        align: "center",
+    },
+    {
+        field :'bookName',
+        headerName: 'Book Name',
+        width: 160,
         align: "center",
     },
     {
         field :'userId',
-        headerName: 'Reader ID',
-        width: 150,
+        headerName: 'Reader',
+        width: 130,
         type: "number",
         align: "center",
     },
     {
-        field :'borrowDate',
-        headerName: 'Borrow Date',
-        width: 160,
+        field: 'reserveDate',
+        headerName: 'Reserve',
+        width: 130,
         align: "center",
-        editable: true,
+        renderCell: (params) => {
+            var reserveDate = params.row.reserveDate.substring(0,10);
+            return(
+                <td>{reserveDate}</td>
+            );
+        }
+    },
+    {
+        field :'borrowDate',
+        headerName: 'Start',
+        width: 130,
+        align: "center",
         renderCell: (params) => {
             var returnDate = params.row.borrowDate.substring(0,10);
             return(
@@ -50,10 +67,9 @@ const columns = [
     },
     {
         field: 'returnDate',
-        headerName: 'Return Date',
-        width: 160,
+        headerName: 'End',
+        width: 130,
         align: "center",
-        editable: true,
         renderCell: (params) => {
            var returnDate = params.row.returnDate.substring(0,10);
             return(
@@ -63,12 +79,12 @@ const columns = [
     },
     {
         field: 'penalty',
-        headerName: 'Penalty',
+        headerName: 'Fine',
         type: "number",
-        width: 130,
+        width: 110,
         align: "center",
         renderCell:(params) =>{
-            console.log(params.row);
+            //console.log(params.row);
             var penaltyValue = params.row.penalty;
             var penaltyState = params.row.penaltyStatus;
             if(penaltyValue > 0 && penaltyState == false){
@@ -79,46 +95,9 @@ const columns = [
         }
     },
     {
-        field: 'borrowStatus',
-        headerName: 'Action',
-        width: 120,
-        align: "center",
-        renderCell:(params) =>{
-            var borrowStatus = params.row.borrowStatus;
-            switch (borrowStatus) {
-                case 10:
-                    return(
-                        <Button style={{fontSize:"5px",padding:"5px",borderColor:"green",backgroundColor:"green",color:"#ffffff"}} variant="contained"  size="small" >
-                            Pick Up
-                        </Button>
-                    );
-                case 20:
-                    return (
-                        <Button style={{fontSize:"5px",padding:"5px"}} variant="contained" size="small" color="primary">
-                            Return Book
-                        </Button>
-                    );
-                case 30:
-                    return(
-                         <td>Returned</td>
-                    );
-                case 40:
-                    return (
-                        <Button style={{fontSize:"5px",padding:"5px"}} variant="contained" color="secondary" size="small">
-                            Pay Penalty
-                        </Button>
-                    )
-                default:
-                    return (
-                        <td>Mull</td>
-                    )
-            }
-        }
-    },
-    {
         field: 'isPaid',
-        headerName: 'Payment',
-        width: 140,
+        headerName: 'Fine Status',
+        width: 150,
         align: "center",
         renderCell:(params) =>{
             var paidStatus = params.row.penaltyStatus;
@@ -138,6 +117,227 @@ const columns = [
             }
         }
     },
+    {
+        field: 'borrowStatus',
+        headerName: 'Action',
+        width: 180,
+        align: "center",
+        renderCell:(params) =>{
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [showPickup, setShowPickup] = useState(false);
+            const handlePickUpClose = () => setShowPickup(false);
+            const handlePickUpShow = () => setShowPickup(true);
+            //confirm pick up
+            const handlePickUp = () =>{
+                axios({
+                    url: '/api/AdminManagement/PickUpBook',
+                    method: 'post',
+                    headers: {
+                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+                    },
+                    contentType:'application/json'
+                    ,
+                    data: params.row
+                }).then((res) => {
+                    console.log(res.data.message);
+                    alert(res.data.message);
+                    return window.location.href = "/Dashboard/BorrowRecords";
+                })
+            }
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [showCancel, setshowCancel] = useState(false);
+            const handleCancelClose = () => setshowCancel(false);
+            const handleCancelShow = () => setshowCancel(true);
+            //confirm cancel reservation
+            const handleCancel = () =>{
+                axios({
+                    url: '/api/AdminManagement/CancelReservation',
+                    method: 'post',
+                    headers: {
+                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+                    },
+                    contentType:'application/json'
+                    ,
+                    data: params.row
+                }).then((res) => {
+                    console.log(res.data.message);
+                    alert(res.data.message);
+                    return window.location.href = "/Dashboard/BorrowRecords";
+                })
+            }
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [showExtend,setShowExtend] = useState(false);
+            const handleExtendClose = () => setShowExtend(false);
+            const handleExtendShow = () => setShowExtend(true);
+            const handleExtend = () =>{
+                axios({
+                    url: '/api/BookList/ExtendBorrowTime',
+                    method: 'post',
+                    headers: {
+                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+                    },
+                    contentType:'application/json'
+                    ,
+                    data: params.row
+                }).then((res) => {
+                    console.log(res.data.message);
+                    alert(res.data.message);
+                    return window.location.href = "/Dashboard/BorrowRecords";
+                })
+            }
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [showReturn, setShowReturn] = useState(false);
+            const handleReturnClose = () => setShowReturn(false);
+            const handleReturnShow = () => setShowReturn(true);
+            //confirm pick up
+            const handleReturn = () =>{
+                axios({
+                    url: '/api/AdminManagement/ReturnBorrowBook',
+                    method: 'post',
+                    headers: {
+                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+                    },
+                    contentType:'application/json'
+                    ,
+                    data: params.row
+                }).then((res) => {
+                    //console.log(res.data.message);
+                    alert(res.data.message);
+                    return window.location.href = "/Dashboard/BorrowRecords";
+                })
+            }
+            //according to different status display different button
+            var borrowStatus = params.row.borrowStatus;
+            var penaltyAmount = params.row.penalty;
+            switch (borrowStatus) {
+                case 10:
+                    return(
+                        <div>
+                            <Button style={{fontSize:"5px",padding:"5px",borderColor:"green",backgroundColor:"green",margin:"1px",color:"#ffffff"}} variant="contained"  size="small" onClick={handlePickUpShow}>
+                                Pick Up
+                            </Button>
+                            <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="outlined" color="disabled" size="small" onClick={handleCancelShow}>
+                                Cancel
+                            </Button>
+                            {/*Pick up confirm modal*/}
+                            <Modal show={showPickup} onHide={handlePickUpClose} style={{top:"100px"}}>
+                                <Modal.Body>
+                                    Are you sure to pick the book?
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="contained" onClick={handlePickUpClose} color="disable">
+                                        Close
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={handlePickUp}>
+                                        Pick Up
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            {/*cancel reservation modal*/}
+                            <Modal show={showCancel} onHide={handleCancelClose} style={{top:"100px"}}>
+                                <Modal.Body>
+                                    Are you sure to cancel the reservation?
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="contained" onClick={handleCancelClose} color="disable">
+                                        Close
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={handleCancel}>
+                                        Cancel
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </div>
+                    );
+                case 20:
+                    // overdue book can not be extended
+                    if(penaltyAmount > 0){
+                        return (
+                            <div>
+                                <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="contained" size="small" color="primary" onClick={handleReturnShow}>
+                                    Return Book
+                                </Button>
+                                {/*Return borrow book modal*/}
+                                <Modal show={showReturn} onHide={handleReturnClose} style={{top:"100px"}}>
+                                    <Modal.Body>
+                                        Are you sure to return book?
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="contained" onClick={handleReturnClose} color="disable">
+                                            Close
+                                        </Button>
+                                        <Button variant="contained" color="primary" onClick={handleReturn}>
+                                            Return
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            </div>
+                        );
+                    }
+                    return (
+                        <div>
+                            <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="contained" size="small" color="primary" onClick={handleReturnShow}>
+                                Return Book
+                            </Button>
+                            <Button style={{fontSize:"5px",padding:"5px"}} variant="outlined" size="small" color="secondary" onClick={handleExtendShow}>
+                                Extend
+                            </Button>
+                            {/*Extend borrow time modal*/}
+                            <Modal show={showExtend} onHide={handlePickUpClose} style={{top:"100px"}}>
+                                <Modal.Body>
+                                    Are you sure to extend the borrow time?
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="contained" onClick={handleExtendClose} color="disable">
+                                        Close
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={handleExtend}>
+                                        Extend
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                            {/*Return borrow book modal*/}
+                            <Modal show={showReturn} onHide={handleReturnClose} style={{top:"100px"}}>
+                                <Modal.Body>
+                                    Are you sure to return book?
+                                </Modal.Body>
+                                <Modal.Footer>
+                                    <Button variant="contained" onClick={handleReturnClose} color="disable">
+                                        Close
+                                    </Button>
+                                    <Button variant="contained" color="primary" onClick={handleReturn}>
+                                        Return
+                                    </Button>
+                                </Modal.Footer>
+                            </Modal>
+                        </div>
+                    );
+
+
+                case 30:
+                    return(
+                        <td>Returned</td>
+                    );
+                case 40:
+                    return (
+                        <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="contained" color="secondary" size="small">
+                            Pay Penalty
+                        </Button>
+                    )
+                case 99:
+                    return(
+                        <td>Canceled</td>
+                    )
+                default:
+                    return (
+                        <td>Null</td>
+                    )
+            }
+        }
+    },
     // {
     //     field: "readerRemark",
     //     headerName: "Remark",
@@ -153,96 +353,6 @@ const columns = [
     //         }
     //     }
     // },
-    {
-        field: 'action',
-        headerName: "Cancel",
-        width: 140,
-        align: "center",
-        sortable: false,
-
-        renderCell: (params) => {
-            console.log(params);
-            const onClickDelete = () => {
-                // const res = JSON.stringify(params.row, null, 4);
-                axios({
-                    url: '/api/AdminManagement/DeleteUserInfo',
-                    method: 'post',
-                    headers: {
-                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
-                    },
-                    contentType:'application/json'
-                    ,
-                    data: params.row
-                }).then((res) => {
-                    console.log(res);
-                    switch (res.data.message){
-                        case 'Exist on hold books.':
-                            alert("Please return all borrow books first");
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Unpaid fine exist.':
-                            alert("Please pay the fine first");
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Delete Successful.':
-                            alert("Delete Successful")
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Have not sign in.':
-                            alert("Please log in first.")
-                            return window.location.href = "/";
-                    }
-                })
-            };
-            const onClickEdit = () => {
-                // return alert(JSON.stringify(params.row, null, 4));
-                axios({
-                    url: '/api/AdminManagement/EditUserInfo',
-                    method: 'post',
-                    headers: {
-                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
-                    },
-                    contentType:'application/json'
-                    ,
-                    data: params.row
-                }).then((res) => {
-                    console.log(res);
-                    switch (res.data.message){
-                        case 'Edit Successful.':
-                            alert("Edit Successful");
-                            return window.location.href="/Dashboard/UserInfo";
-                        case 'Have not log in.':
-                            alert("Please log in first.")
-                            return window.location.href = "/";
-                        case "Email already exist":
-                            alert("Fail to edit.Email already exist")
-                            return window.location.href="/Dashboard/UserInfo"
-
-                    }
-                })
-            };
-            var borrowStatus = params.row.borrowStatus;
-            if (borrowStatus == 10){
-                return(
-                    <div>
-                        <Button style={{fontSize:"5px",padding:"1px",borderColor:"gray",color:"gray",margin:"1px"}} variant="outlined" color="primary" size="small" onClick={onClickEdit}>
-                            Cancel
-                        </Button>
-                    </div>
-                )
-            }
-
-
-
-            // return (
-            //     <>
-            //         <Button color="secondary" onClick={onClickEdit}>
-            //             <EditIcon />
-            //         </Button>
-            //         <IconButton color="secondary" onClick={onClickDelete}>
-            //             <DeleteIcon />
-            //         </IconButton>
-            //     </>
-            // );
-        },
-    },
 ]
 
 const useStyles = makeStyles((theme) => ({
@@ -348,7 +458,7 @@ export default function BorrowRecords() {
                     <button className={UserInfoTable.addButton} onClick={handleShow} >Add Records</button>
                     <button className={UserInfoTable.addButton} onClick={handleRefresh}><RefreshIcon /></button>
                 </div>
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 530, width: '100%' }}>
                     <DataGrid
                         getRowId={(r) => r.recordId}
                         rows={data}

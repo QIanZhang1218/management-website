@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import Container from '@material-ui/core/Container';
 import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
-import {useHistory} from "react-router-dom";
 import {DataGrid,} from "@material-ui/data-grid";
 import EditIcon from "@material-ui/icons/Edit";
 import {IconButton} from "@material-ui/core";
@@ -194,18 +193,13 @@ const columns = [
                     ,
                     data: params.row
                 }).then((res) => {
-                    console.log(res);
-                    // switch (res.data.message){
-                    //     case 'Edit Successful.':
-                    //         alert(res.data.message);
-                    //         return window.location.href="/Dashboard/AdminInfo";
-                    //     case 'Have not log in.':
-                    //         alert("Please log in first.")
-                    //         return window.location.href = "/";
-                    //     case 'Email already exist':
-                    //         alert(res.data.message);
-                    //         return window.location.href="/Dashboard/AdminInfo";
-                    // }
+                    if (res.data.message === "Edit Successful."){
+                        alert(res.data.message);
+                        return window.location.href="/Dashboard/BookInfo";
+                    }else if(res.data.message === "Please login first."){
+                        alert(res.data.message);
+                        return window.location.href="/";
+                    }
                 })
             };
 
@@ -280,8 +274,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function BookInfo() {
     const classes = useStyles();
-    let history = useHistory();
-    const [record,setRecord] = useState(true);
     const [isLoading, setLoading] = useState(true);
     const [data,setData] = useState();
     //react bootstrap modal
@@ -329,14 +321,14 @@ export default function BookInfo() {
                     <button className={UserInfoTable.addButton} onClick={handleShow} >Add Book</button>
                     <button className={UserInfoTable.addButton} onClick={handleRefresh}><RefreshIcon /></button>
                 </div>
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 530, width: '100%' }}>
                     <DataGrid
                         getRowId={(r) => r.bookId}
                         rows={data}
                         rwoHeight={20}
                         columns={columns}
-                        pageSize={5}
-                        rowsPerPageOptions={[5]}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
                     />
                 </div>
                 {/*react bootstrap modal*/}

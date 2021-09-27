@@ -2,7 +2,7 @@ import React from "react";
 import Container from '@material-ui/core/Container';
 import Chart from './Chart/Chart';
 import Penalty from './Penalty/Penalty';
-import Orders from './Orders/Orders';
+import Reservations from './Reservations/Reservations';
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from '@material-ui/core/styles';
@@ -88,10 +88,10 @@ export default function HomePage(){
                             <Penalty />
                         </Paper>
                     </Grid>
-                    {/* Recent Orders */}
+                    {/* Recent Reservations */}
                     <Grid item xs={12}>
                         <Paper className={classes.paper}>
-                            <Orders />
+                            <Reservations />
                         </Paper>
                     </Grid>
                 </Grid>

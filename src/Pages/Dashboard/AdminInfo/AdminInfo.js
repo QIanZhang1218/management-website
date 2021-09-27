@@ -241,7 +241,7 @@ export default function AdminInfo() {
                     <button className={UserInfoTable.addButton} onClick={handleShow} >Add Administrator</button>
                     <button className={UserInfoTable.addButton} onClick={handleRefresh}><RefreshIcon /></button>
                 </div>
-                <div style={{ height: 400, width: '100%' }}>
+                <div style={{ height: 530, width: '100%' }}>
                     <DataGrid
                         getRowId={(r) => r.adminId}
                         rows={data}
