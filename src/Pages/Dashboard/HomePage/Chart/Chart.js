@@ -1,53 +1,41 @@
-import React from 'react';
-import { useTheme } from '@material-ui/core/styles';
-import { LineChart, Line, XAxis, YAxis, Label, ResponsiveContainer } from 'recharts';
+import React, {useEffect, useState} from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid,  Legend, ResponsiveContainer } from 'recharts';
 import Title from '../Title/Title';
-//top line charts
-// Generate Sales Data
-function createData(time, amount) {
-    return { time, amount };
-}
-
-const data = [
-    createData('00:00', 0),
-    createData('03:00', 300),
-    createData('06:00', 600),
-    createData('09:00', 800),
-    createData('12:00', 1500),
-    createData('15:00', 2000),
-    createData('18:00', 2400),
-    createData('21:00', 2400),
-    createData('24:00', undefined),
-];
-
+import axios from "axios";
 export default function Chart() {
-    const theme = useTheme();
-
+    const [isLoading, setLoading] = useState(true);
+    const [data,setData] = React.useState();
+    useEffect(() => {
+        axios.get( "/api/AdminManagement/GetMostPopularBookLIst",).then(response => {
+            console.log(response.data);
+            setData(response.data);
+            setLoading(false);
+        })
+    }, []);
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
     return (
         <React.Fragment>
             <Title>Most Popular Books of the Month</Title>
             <ResponsiveContainer>
-                <LineChart
+                <BarChart
+                    width={500}
+                    height={300}
                     data={data}
                     margin={{
-                        top: 16,
-                        right: 16,
-                        bottom: 0,
-                        left: 24,
+                        top: 5,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
                     }}
                 >
-                    <XAxis dataKey="time" stroke={theme.palette.text.secondary} />
-                    <YAxis stroke={theme.palette.text.secondary}>
-                        <Label
-                            angle={270}
-                            position="left"
-                            style={{ textAnchor: 'middle', fill: theme.palette.text.primary }}
-                        >
-                            Times
-                        </Label>
-                    </YAxis>
-                    <Line type="monotone" dataKey="amount" stroke={theme.palette.primary.main} dot={false} />
-                </LineChart>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="bookName" />
+                    <YAxis dataKey="bookBorrowTimes"  />
+                    <Legend />
+                    <Bar dataKey="bookBorrowTimes" barSize={40} fill="#3f51b5" label={"Book Borrow Times"}/>
+                </BarChart>
             </ResponsiveContainer>
         </React.Fragment>
     );
