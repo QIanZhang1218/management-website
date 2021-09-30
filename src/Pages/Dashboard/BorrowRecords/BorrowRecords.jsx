@@ -209,9 +209,39 @@ const columns = [
                     return window.location.href = "/Dashboard/BorrowRecords";
                 })
             }
+
+            // eslint-disable-next-line react-hooks/rules-of-hooks
+            const [showPay, setShowPay] = useState(false);
+            const handlePayClose = () => setShowPay(false);
+            const handlePayShow = () => setShowPay(true);
+            //confirm pick up
+            const handlePay = () =>{
+                console.log(params.row);
+                axios({
+                    url: '/api/BookList/CompletePayFine',
+                    method: 'post',
+                    headers: {
+                        'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+                    },
+                    contentType:'application/json'
+                    ,
+                    data: {
+                        recordId:params.row.recordId
+                    }
+                }).then((res) => {
+                    if (res.data.message=="Pay Successfully."){
+                        alert("Finish Payment");
+                        return window.location.href = "/Dashboard/BorrowRecords";
+                    }
+                    //console.log(res.data.message);
+                    alert(res.data.message);
+                    return window.location.href = "/Dashboard/BorrowRecords";
+                })
+            }
             //according to different status display different button
             var borrowStatus = params.row.borrowStatus;
             var penaltyAmount = params.row.penalty;
+            var penaltyStatus = params.row.penaltyStatus;
             switch (borrowStatus) {
                 case 10:
                     return(
@@ -318,6 +348,29 @@ const columns = [
 
 
                 case 30:
+                    if(!penaltyStatus && penaltyAmount > 0){
+                        return (
+                            <div>
+                                <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="contained" color="secondary" size="small" onClick={handlePayShow}>
+                                    Pay Penalty
+                                </Button>
+                                {/*Return borrow book modal*/}
+                                <Modal show={showPay} onHide={handlePayClose} style={{top:"100px"}}>
+                                    <Modal.Body>
+                                        Complete payment?
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="contained" onClick={handlePayClose} color="disable">
+                                            Close
+                                        </Button>
+                                        <Button variant="contained" color="primary" onClick={handlePay}>
+                                            Paid
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            </div>
+                        )
+                    }
                     return(
                         <td>Returned</td>
                     );
