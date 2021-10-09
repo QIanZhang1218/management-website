@@ -4,14 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
 import {DataGrid,} from "@material-ui/data-grid";
-// import EditIcon from "@material-ui/icons/Edit";
-// import {IconButton} from "@material-ui/core";
-// import DeleteIcon from "@material-ui/icons/Delete"
 import RefreshIcon from '@material-ui/icons/Refresh';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal} from 'react-bootstrap';
 import UserInfoTable from '../UserInfo/UserInfo.module.css'
 import Button from "@material-ui/core/Button";
+import AddBorrowRecordsForm from "./AddBorrowRecords/AddBorrowRecords";
 
 const columns = [
     {
@@ -243,6 +241,7 @@ const columns = [
             var penaltyAmount = params.row.penalty;
             var penaltyStatus = params.row.penaltyStatus;
             switch (borrowStatus) {
+                // reserved but have not pick
                 case 10:
                     return(
                         <div>
@@ -282,6 +281,7 @@ const columns = [
                             </Modal>
                         </div>
                     );
+                    // pick up not return
                 case 20:
                     // overdue book can not be extended
                     if(penaltyAmount > 0){
@@ -307,6 +307,7 @@ const columns = [
                             </div>
                         );
                     }
+                    // on hold not overdue books can be extend(7 days a time)
                     return (
                         <div>
                             <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="contained" size="small" color="primary" onClick={handleReturnShow}>
@@ -527,7 +528,7 @@ export default function BorrowRecords() {
                         <Modal.Title>Add New Record</Modal.Title>
                     </Modal.Header>
                     <Modal.Body>
-                        {/*<AddUserForm handleSubmit={handleSubmit} />*/}
+                        <AddBorrowRecordsForm />
                     </Modal.Body>
                 </Modal>
             </Container>

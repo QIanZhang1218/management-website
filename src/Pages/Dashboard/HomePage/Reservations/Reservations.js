@@ -48,10 +48,12 @@ export default function Reservations() {
     const [data,setData] = React.useState();
     useEffect(() => {
         axios.get( "/api/AdminManagement/GetRecentReservation",).then(response => {
+            console.log(response.data);
             if(response.data.message === "No records"){
                 setRecord(false);
+                setLoading(false);
             }
-            if(response.data.message == "Get Records"){
+            else if(response.data.message == "Get Records"){
                 setData(response.data.bookList);
                 setLoading(false);
             }else{
@@ -62,6 +64,7 @@ export default function Reservations() {
     if (isLoading) {
         return <div>Loading...</div>;
     }
+    console.log(record);
     if(!record){
         return <div>No relative records</div>;
     }

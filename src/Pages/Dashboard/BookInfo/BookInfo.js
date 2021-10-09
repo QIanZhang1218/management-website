@@ -10,7 +10,7 @@ import RefreshIcon from '@material-ui/icons/Refresh';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Modal} from 'react-bootstrap';
 import UserInfoTable from '../UserInfo/UserInfo.module.css';
-import AddBookForm from './AddBookInfo/AddBookInfo';
+import AddBookForm from './AddBookInfo/AddBookInfoForm';
 
 const columns = [
     {

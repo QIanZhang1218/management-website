@@ -68,7 +68,7 @@ export default function Login() {
             console.log(Result.data);
             if (Result.data.success === true){
                 document.cookie="token="+Result.data.token;
-                history.push("/Dashboard");
+                history.push("/Dashboard/HomePage");
             }
 
             else

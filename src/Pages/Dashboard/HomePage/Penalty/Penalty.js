@@ -21,6 +21,7 @@ export default function Penalty() {
     const classes = useStyles();
     const [isLoading,setLoading] = useState(true);
     const [penalty,setPenalty] = useState();
+    var unpaid;
     useEffect(() => {
         axios.get( "/api/AdminManagement/GetUnpaidPenalty",).then(response => {
             // setData(response.data);
@@ -43,7 +44,7 @@ export default function Penalty() {
             </Typography>
             <div>
                 <Link color="primary" href="#" onClick={preventDefault}>
-                    View Details
+                    View balance
                 </Link>
             </div>
         </React.Fragment>
