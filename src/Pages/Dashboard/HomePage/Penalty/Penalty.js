@@ -4,13 +4,12 @@ import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Title from '../Title/Title';
 import axios from "axios";
-import moment from 'moment'
+import moment from 'moment';
 
 //top right penalty amount
 function preventDefault(event) {
     event.preventDefault();
 }
-
 const useStyles = makeStyles({
     depositContext: {
         flex: 1,
@@ -43,8 +42,8 @@ export default function Penalty() {
                 {moment().format('dddd')}&nbsp;&nbsp;{moment().format('DD-MM-YYYY')}
             </Typography>
             <div>
-                <Link color="primary" href="#" onClick={preventDefault}>
-                    View balance
+                <Link  color="primary" href="/Dashboard/PenaltyDetails">
+                    View details
                 </Link>
             </div>
         </React.Fragment>

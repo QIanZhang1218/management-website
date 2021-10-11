@@ -9,14 +9,12 @@ import TableRow from '@material-ui/core/TableRow';
 import Title from '../Title/Title';
 import axios from "axios";
 import {useHistory} from "react-router-dom";
-import {TableContainer} from "@material-ui/core";
 
 const columns = [
     {
-        id: 'reserveDate',
-        label: 'Reserve Date',
+        id: 'recordId',
+        label: 'Record ID',
         minWidth: 150,
-        format: (value) => value.substring(0, 10),
     },
     { id: 'bookId', label: 'Boook ID', minWidth: 150},
     { id: 'bookName', label: 'Boook Name', minWidth: 170 },
@@ -29,15 +27,26 @@ const columns = [
     },
     {
         id: 'returnDate',
-        label: 'End',
+        label: 'Expect Return',
         minWidth: 150,
         format:(value) => value.substring(0, 10),
     },
+    {
+        id: 'actualReturnDate',
+        label: 'Return date',
+        minWidth: 150,
+        format:(value) => value.substring(0, 10),
+    },
+    {
+        id: "penalty",
+        label:"Penalty",
+        minWidth: 150
+    }
 ];
 
 const useStyles = makeStyles((theme) => ({
     seeMore: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(3),
     },
 }));
 
@@ -48,7 +57,7 @@ export default function Reservations() {
     const [record,setRecord] = useState(true);
     const [data,setData] = React.useState();
     useEffect(() => {
-        axios.get( "/api/AdminManagement/GetRecentReservation",).then(response => {
+        axios.get( "/api/AdminManagement/GetUnpaidPenaltyDetails",).then(response => {
             console.log(response.data);
             if(response.data.message === "No records"){
                 setRecord(false);
@@ -71,9 +80,9 @@ export default function Reservations() {
     }
     return (
         <React.Fragment>
-            <Title>Recent Reservations</Title>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
+            <div style={{marginTop:"70px",padding:"10px"}}>
+                <Title>Unpaid Penalty Details</Title>
+                <Table size="small">
                     <TableHead>
                         <TableRow>
                             {columns.map((column) => (
@@ -106,12 +115,13 @@ export default function Reservations() {
                         })}
                     </TableBody>
                 </Table>
-            </TableContainer>
-            <div className={classes.seeMore}>
-                <Link color="primary" href="/Dashboard/BorrowRecords" >
-                    See more reservations
-                </Link>
             </div>
+
+            {/*<div className={classes.seeMore}>*/}
+            {/*    <Link color="primary" href="/Dashboard/BorrowRecords" >*/}
+            {/*        See more reservations*/}
+            {/*    </Link>*/}
+            {/*</div>*/}
         </React.Fragment>
     );
 }

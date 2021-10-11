@@ -25,7 +25,7 @@ import HomePage from './HomePage/HomePage';
 import UserInfo from "./UserInfo/UserInfo";
 import BookInfo from "./BookInfo/BookInfo";
 import BorrowRecords from "./BorrowRecords/BorrowRecords";
-
+import PenaltyDetails from "./HomePage/Penalty/PenaltyDetails";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -199,6 +199,7 @@ export default function Dashboard() {
                     <Route path="/Dashboard/AdminInfo" component = {AdminInfo}/>
                     <Route path="/Dashboard/BookInfo" component = {BookInfo} />
                     <Route path="/Dashboard/BorrowRecords" component = {BorrowRecords} />
+                    <Route parh="/Dashboard/PenaltyDetails" component = {PenaltyDetails}/>
                     <Redirect to="/Dashboard/HomePage"/>
                 </Switch>
             </main>
