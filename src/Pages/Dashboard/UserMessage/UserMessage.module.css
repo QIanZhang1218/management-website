@@ -1,0 +1,17 @@
+.processBtn{
+    padding: 2px;
+    font-size: 6px;
+    color: 	#FF8800  ;
+    border: 1px solid #FF8800 ;
+    background-color: transparent;
+    line-height: 20px;
+    margin-right: 10px;
+}
+.finishBtn{
+    padding: 2px;
+    font-size: 6px;
+    color: 	#00AA00 ;
+    border: 1px solid #00AA00 ;
+    background-color: transparent;
+    line-height: 20px;
+}

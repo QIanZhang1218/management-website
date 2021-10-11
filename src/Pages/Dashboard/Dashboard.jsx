@@ -26,6 +26,7 @@ import UserInfo from "./UserInfo/UserInfo";
 import BookInfo from "./BookInfo/BookInfo";
 import BorrowRecords from "./BorrowRecords/BorrowRecords";
 import PenaltyDetails from "./HomePage/Penalty/PenaltyDetails";
+import UserMessage from "./UserMessage/UserMessage";
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -185,6 +186,12 @@ export default function Dashboard() {
                         </ListItemIcon>
                         <ListItemText primary="Borrow Records" />
                     </ListItem>
+                    <ListItem component={Link} to="/Dashboard/UserMessage" button>
+                        <ListItemIcon>
+                            <ListAltIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="User Message" />
+                    </ListItem>
                 </List>
             </Drawer>
 
@@ -199,6 +206,7 @@ export default function Dashboard() {
                     <Route path="/Dashboard/AdminInfo" component = {AdminInfo}/>
                     <Route path="/Dashboard/BookInfo" component = {BookInfo} />
                     <Route path="/Dashboard/BorrowRecords" component = {BorrowRecords} />
+                    <Route path="/Dashboard/UserMessage" component = {UserMessage} />
                     <Route parh="/Dashboard/PenaltyDetails" component = {PenaltyDetails}/>
                     <Redirect to="/Dashboard/HomePage"/>
                 </Switch>

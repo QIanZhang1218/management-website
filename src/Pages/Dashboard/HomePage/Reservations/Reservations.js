@@ -37,7 +37,7 @@ const columns = [
 
 const useStyles = makeStyles((theme) => ({
     seeMore: {
-        marginTop: theme.spacing(5),
+        marginTop: theme.spacing(2),
     },
 }));
 
