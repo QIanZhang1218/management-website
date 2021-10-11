@@ -16,19 +16,20 @@ export default function AddBorrowRecordsForm() {
             userId,bookId,borrowDate,reserveDate
         }
         console.log(para);
-        // axios({
-        //     url:'/api/AdminSignUp/PushAdminSignUp',
-        //     method:'post',
-        //     headers: {
-        //         'deviceCode': 'A95ZEF1-47B5-AC90BF3'
-        //     },
-        //     contentType:'application/json',
-        //     data:para
-        // }).then(response => {
-        //         alert(response.data.message);
-        //         window.location.href="/Dashboard/AdminInfo";
-        //     }
-        // )
+        console.log(para);
+        axios({
+            url:'/api/AdminManagement/AddNewReservation',
+            method:'post',
+            headers: {
+                'deviceCode': 'A95ZEF1-47B5-AC90BF3'
+            },
+            contentType:'application/json',
+            data:para
+        }).then(response => {
+                alert(response.data.message);
+                window.location.href="/Dashboard/AdminInfo";
+            }
+        )
     }
 
     return (

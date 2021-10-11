@@ -10,6 +10,7 @@ import {Modal} from 'react-bootstrap';
 import UserInfoTable from '../UserInfo/UserInfo.module.css'
 import Button from "@material-ui/core/Button";
 import AddBorrowRecordsForm from "./AddBorrowRecords/AddBorrowRecords";
+import moment from "moment";
 
 const columns = [
     {
@@ -76,6 +77,29 @@ const columns = [
         }
     },
     {
+        field: 'actualReturnDate',
+        headerName: 'Return',
+        width: 130,
+        align: "center",
+        renderCell: (params) => {
+            var actualReturnDate = params.row.actualReturnDate.substring(0,10);
+            var borrowStatus = params.row.borrowStatus;
+            if (borrowStatus == 30){
+                if (actualReturnDate == "2020-01-01"){
+                    return(
+                        <td>--</td>
+                    );
+                }
+                return(
+                    <td>{actualReturnDate}</td>
+                );
+            }
+            return(
+                <td>--</td>
+            );
+        }
+    },
+    {
         field: 'penalty',
         headerName: 'Fine',
         type: "number",
@@ -125,6 +149,7 @@ const columns = [
             const [showPickup, setShowPickup] = useState(false);
             const handlePickUpClose = () => setShowPickup(false);
             const handlePickUpShow = () => setShowPickup(true);
+            const actualReturnDate = moment().format('YYYY-MM-DD');
             //confirm pick up
             const handlePickUp = () =>{
                 axios({
@@ -135,7 +160,7 @@ const columns = [
                     },
                     contentType:'application/json'
                     ,
-                    data: params.row
+                    data: params.row,actualReturnDate
                 }).then((res) => {
                     console.log(res.data.message);
                     alert(res.data.message);
@@ -240,32 +265,58 @@ const columns = [
             var borrowStatus = params.row.borrowStatus;
             var penaltyAmount = params.row.penalty;
             var penaltyStatus = params.row.penaltyStatus;
+            let borrowDate = params.row.borrowDate.substring(0,10);
+            let currentDate = moment().format('YYYY-MM-DD');
+
             switch (borrowStatus) {
                 // reserved but have not pick
                 case 10:
+                    // pick up button dispay on the day of borrowdate
+                    if (borrowDate == currentDate){
+                        return(
+                            <div>
+                                <Button style={{fontSize:"5px",padding:"5px",borderColor:"green",backgroundColor:"green",margin:"1px",color:"#ffffff"}} variant="contained"  size="small" onClick={handlePickUpShow}>
+                                    Pick Up
+                                </Button>
+                                <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="outlined" color="disabled" size="small" onClick={handleCancelShow}>
+                                    Cancel
+                                </Button>
+                                {/*Pick up confirm modal*/}
+                                <Modal show={showPickup} onHide={handlePickUpClose} style={{top:"100px"}}>
+                                    <Modal.Body>
+                                        Are you sure to pick the book?
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="contained" onClick={handlePickUpClose} color="disable">
+                                            Close
+                                        </Button>
+                                        <Button variant="contained" color="primary" onClick={handlePickUp}>
+                                            Pick Up
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                                {/*cancel reservation modal*/}
+                                <Modal show={showCancel} onHide={handleCancelClose} style={{top:"100px"}}>
+                                    <Modal.Body>
+                                        Are you sure to cancel the reservation?
+                                    </Modal.Body>
+                                    <Modal.Footer>
+                                        <Button variant="contained" onClick={handleCancelClose} color="disable">
+                                            Close
+                                        </Button>
+                                        <Button variant="contained" color="primary" onClick={handleCancel}>
+                                            Cancel
+                                        </Button>
+                                    </Modal.Footer>
+                                </Modal>
+                            </div>
+                        );
+                    }
                     return(
                         <div>
-                            <Button style={{fontSize:"5px",padding:"5px",borderColor:"green",backgroundColor:"green",margin:"1px",color:"#ffffff"}} variant="contained"  size="small" onClick={handlePickUpShow}>
-                                Pick Up
-                            </Button>
                             <Button style={{fontSize:"5px",padding:"5px",margin:"1px"}} variant="outlined" color="disabled" size="small" onClick={handleCancelShow}>
                                 Cancel
                             </Button>
-                            {/*Pick up confirm modal*/}
-                            <Modal show={showPickup} onHide={handlePickUpClose} style={{top:"100px"}}>
-                                <Modal.Body>
-                                    Are you sure to pick the book?
-                                </Modal.Body>
-                                <Modal.Footer>
-                                    <Button variant="contained" onClick={handlePickUpClose} color="disable">
-                                        Close
-                                    </Button>
-                                    <Button variant="contained" color="primary" onClick={handlePickUp}>
-                                        Pick Up
-                                    </Button>
-                                </Modal.Footer>
-                            </Modal>
-                            {/*cancel reservation modal*/}
                             <Modal show={showCancel} onHide={handleCancelClose} style={{top:"100px"}}>
                                 <Modal.Body>
                                     Are you sure to cancel the reservation?
@@ -280,7 +331,9 @@ const columns = [
                                 </Modal.Footer>
                             </Modal>
                         </div>
-                    );
+                    )
+
+
                     // pick up not return
                 case 20:
                     // overdue book can not be extended
