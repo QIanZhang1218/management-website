@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -13,10 +13,12 @@ import {Link,Route,Redirect,Switch} from 'react-router-dom';
 import MenuIcon from '@material-ui/icons/Menu';
 import FaceIcon from '@material-ui/icons/Face';
 import BookIcon from '@material-ui/icons/Book';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ListAltIcon from '@material-ui/icons/ListAlt';
 import ListItem from "@material-ui/core/ListItem";
+import axios from "axios";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import DashboardIcon from "@material-ui/icons/Dashboard";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -27,6 +29,8 @@ import BookInfo from "./BookInfo/BookInfo";
 import BorrowRecords from "./BorrowRecords/BorrowRecords";
 import PenaltyDetails from "./HomePage/Penalty/PenaltyDetails";
 import UserMessage from "./UserMessage/UserMessage";
+import DashboardStyle from "../Dashboard.module.css";
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -110,14 +114,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Dashboard() {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = useState(true);
+    const [name, setName] =useState();
     const handleDrawerOpen = () => {
         setOpen(true);
     };
     const handleDrawerClose = () => {
         setOpen(false);
     };
+    useEffect(()=>{
+        axios.get( "/api/AdminLogin/GetAdminName",).then(response => {
+            console.log(response);
+            if(response.data.success){
+                setName(response.data.adminList[0].adminName);
+            }
+            console.log(name);
+            })
+        });
+    //Log out clear cookie
+    function handleLogOut(){
+        let cookie = document.cookie.split(";");;
+        console.log(cookie);
+        let exp = new Date();
+        exp.setTime(exp.getTime() - 1);
+        if(window.confirm("Are you sure to log out?")){
+            if(cookie != null){
+                document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href="/";
+            }
 
+        }
+    }
     return (
         <div className={classes.root}>
             <CssBaseline />
@@ -135,11 +162,9 @@ export default function Dashboard() {
                     <Typography component="h1" variant="h6" color="inherit" noWrap className={classes.title}>
                         Dashboard
                     </Typography>
-                    {/*<IconButton color="inherit">*/}
-                    {/*    <Badge badgeContent={4} color="secondary">*/}
-                    {/*        <NotificationsIcon />*/}
-                    {/*    </Badge>*/}
-                    {/*</IconButton>*/}
+                    <div className={DashboardStyle.nameBox}>
+                        <span>Welcome {name}</span>
+                    </div>
                 </Toolbar>
             </AppBar>
             <Drawer
@@ -191,6 +216,12 @@ export default function Dashboard() {
                             <ListAltIcon />
                         </ListItemIcon>
                         <ListItemText primary="User Message" />
+                    </ListItem>
+                    <ListItem  onClick={handleLogOut}  button>
+                        <ListItemIcon>
+                            <ExitToAppIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Log Out" />
                     </ListItem>
                 </List>
             </Drawer>
